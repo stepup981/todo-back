@@ -1,0 +1,25 @@
+GREEN="\033[0;32m"
+RED="\033[0;31m"
+YELLOW="\033[1;33m"
+BLUE="\033[0;34m"
+NC="\033[0m" 
+
+echo -e "${BLUE}📦 Running formatter...${NC}"
+npm run format
+git add .
+
+echo -e "${BLUE}🔍 Running linter...${NC}"
+npm run lint
+
+if [ $? -ne 0 ]; then
+  echo -e "${YELLOW}⚠️  Lint errors detected. Trying again...${NC}"
+  npm run lint
+
+  if [ $? -ne 0 ]; then
+    echo -e "${RED}❌ Lint errors still detected. Commit aborted.${NC}"
+    exit 1
+  fi
+fi
+git add .
+
+echo -e "${GREEN}✅ Commit ready!${NC}"
