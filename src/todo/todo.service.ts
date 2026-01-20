@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class TodoService {
-  private readonly tasks = [
+  private readonly todos = [
     {
       id: 1,
       name: 'рFADFGADG',
@@ -31,6 +31,23 @@ export class TodoService {
   ];
 
   findAll() {
-    return this.tasks;
+    return this.todos;
+  }
+
+  findById(id: number) {
+    const task = this.todos.find(t => t.id === id);
+
+    if (!task) throw new NotFoundException('Такой записи не найдено');
+    return task;
+  }
+
+  addTodo() {
+    const lastTask = this.todos[this.todos.length - 1];
+    const newTodo = {
+      id: lastTask.id + 1,
+      name: `pepe + ${lastTask.id}`,
+      description: `faaaaaaa + ${lastTask.id}`,
+    };
+    return this.todos.push(newTodo);
   }
 }
