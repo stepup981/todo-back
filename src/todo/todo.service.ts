@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateTodoDto } from './dto/create-todo.dto';
 
 @Injectable()
 export class TodoService {
@@ -41,13 +42,14 @@ export class TodoService {
     return task;
   }
 
-  addTodo() {
-    const lastTask = this.todos[this.todos.length - 1];
+  create(dto: CreateTodoDto) {
+    const { name, description } = dto;
     const newTodo = {
-      id: lastTask.id + 1,
-      name: `pepe + ${lastTask.id}`,
-      description: `faaaaaaa + ${lastTask.id}`,
+      id: this.todos.length + 1,
+      name,
+      description: description ?? '',
     };
-    return this.todos.push(newTodo);
+    this.todos.push(newTodo);
+    return this.todos;
   }
 }

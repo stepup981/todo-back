@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Query, UseGuards, UseInterceptors, Post } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards, UseInterceptors, Post, Body } from '@nestjs/common';
 import { TodoService } from './todo.service';
 import { ParseIntPipe } from '@/conceptions/pipe';
 import { AuthGuard } from '@/conceptions/guard';
 import { LoggindInterceptor } from '@/conceptions/interceptor';
+import { CreateTodoDto } from './dto/create-todo.dto';
 
 @Controller('todos')
 @UseInterceptors(LoggindInterceptor)
@@ -22,7 +23,7 @@ export class TodosController {
   }
 
   @Post()
-  addTodo() {
-    return this.todoService.addTodo();
+  addTodo(@Body() dto: CreateTodoDto) {
+    return this.todoService.create(dto);
   }
 }
