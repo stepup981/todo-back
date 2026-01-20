@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { TodosModule } from '@/todos/todos.module';
+import { TodosModule } from '@/todo/todo.module';
 import { LoggerMiddleware } from './conceptions/middleware';
 
 @Module({
