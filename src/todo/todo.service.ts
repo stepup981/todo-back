@@ -1,9 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodoService {
-  private readonly todos = [
+  private todos = [
     {
       id: 1,
       name: 'рFADFGADG',
@@ -51,5 +52,24 @@ export class TodoService {
     };
     this.todos.push(newTodo);
     return this.todos;
+  }
+
+  update(id: number, dto: UpdateTodoDto) {
+    const { name, description } = dto;
+    const todo = this.findById(id);
+    todo.name = name;
+    todo.description = description;
+    return todo;
+  }
+
+  patchUpdate(id: number, dto: Partial<UpdateTodoDto>) {
+    const todo = this.findById(id);
+    Object.assign(todo, dto);
+    return todo;
+  }
+
+  delete(id: number) {
+    this.todos = this.todos.filter(t => t.id !== id);
+    return true;
   }
 }
