@@ -1,19 +1,5 @@
-import {
-  Controller,
-  Get,
-  Param,
-  Query,
-  UseGuards,
-  UseInterceptors,
-  Post,
-  Body,
-  Put,
-  Patch,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Param, UseInterceptors, Post, Body, Put, Patch, Delete } from '@nestjs/common';
 import { TodoService } from './todo.service';
-import { ParseIntPipe } from '../conceptions/pipe';
-import { AuthGuard } from '../conceptions/guard';
 import { LoggindInterceptor } from '../conceptions/interceptor';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
@@ -24,34 +10,32 @@ export class TodosController {
   constructor(private readonly todoService: TodoService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
-  findAll(@Query('pageNumber', ParseIntPipe) pageNumber: number) {
-    console.log(pageNumber);
-    return this.todoService.findAll();
+  getTodos() {
+    return this.todoService.getTodos();
   }
 
   @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.todoService.findById(Number(id));
+  getTodo(@Param('id') id: string) {
+    return this.todoService.getTodo(+id);
   }
 
   @Post()
-  addTodo(@Body() dto: CreateTodoDto) {
-    return this.todoService.create(dto);
+  createTodo(@Body() dto: CreateTodoDto) {
+    return this.todoService.createTodo(dto);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() dto: UpdateTodoDto) {
-    return this.todoService.update(Number(id), dto);
+  updateTodo(@Param('id') id: string, @Body() dto: UpdateTodoDto) {
+    return this.todoService.updateTodo(+id, dto);
   }
 
   @Patch(':id')
-  patchUpdate(@Param('id') id: string, @Body() dto: Partial<UpdateTodoDto>) {
-    return this.todoService.patchUpdate(Number(id), dto);
+  updateTodoPatch(@Param('id') id: string, @Body() dto: Partial<UpdateTodoDto>) {
+    return this.todoService.updateTodoPatch(+id, dto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.todoService.delete(Number(id));
+  deleteTodo(@Param('id') id: string) {
+    return this.todoService.deleteTodo(+id);
   }
 }
