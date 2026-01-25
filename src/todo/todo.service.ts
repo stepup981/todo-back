@@ -15,7 +15,7 @@ export class TodoService {
   async getTodo(id: number): Promise<Todo> {
     const task = await this.prisma.todo.findUnique({ where: { id } });
 
-    if (!task) throw new NotFoundException('Такой записи не найдено');
+    if (!task) throw new NotFoundException('Такой задачи не существует');
     return task;
   }
 
@@ -32,31 +32,39 @@ export class TodoService {
   }
 
   async updateTodo(id: number, dto: UpdateTodoDto): Promise<Todo> {
-    const { name, description } = dto;
-
-    return await this.prisma.todo.update({
-      where: { id },
-      data: {
-        name,
-        description,
-      },
-    });
+    try {
+      return await this.prisma.todo.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new NotFoundException(`Такой задачи не существует`);
+    }
   }
 
   async updateTodoPatch(id: number, dto: Partial<UpdateTodoDto>): Promise<Todo> {
     const { name, description } = dto;
 
-    return await this.prisma.todo.update({
-      where: { id },
-      data: {
-        ...(name !== undefined && { name }),
-        ...(description !== undefined && { description }),
-      },
-    });
+    try {
+      return await this.prisma.todo.update({
+        where: { id },
+        data: {
+          ...(name !== undefined && { name }),
+          ...(description !== undefined && { description }),
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      throw new NotFoundException(`Такой задачи не существует`);
+    }
   }
 
   async deleteTodo(id: number): Promise<boolean> {
-    await this.prisma.todo.delete({ where: { id } });
-    return true;
+    const result = await this.prisma.todo.deleteMany({
+      where: { id },
+    });
+
+    return result.count > 0;
   }
 }
