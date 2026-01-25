@@ -12,9 +12,9 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TodoService } from './todo.service';
-import { ParseIntPipe } from '@/conceptions/pipe';
-import { AuthGuard } from '@/conceptions/guard';
-import { LoggindInterceptor } from '@/conceptions/interceptor';
+import { ParseIntPipe } from '../conceptions/pipe';
+import { AuthGuard } from '../conceptions/guard';
+import { LoggindInterceptor } from '../conceptions/interceptor';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 

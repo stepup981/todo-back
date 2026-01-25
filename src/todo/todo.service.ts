@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class TodoService {
+  constructor(private prisma: PrismaService) {}
   private todos = [
     {
       id: 1,
@@ -32,8 +34,8 @@ export class TodoService {
     },
   ];
 
-  findAll() {
-    return this.todos;
+  async findAll() {
+    return this.prisma.todo.findMany();
   }
 
   findById(id: number) {
